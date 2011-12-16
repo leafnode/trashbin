@@ -54,7 +54,7 @@ $app->post('/create', function() use ($app) {
     $paste = array(
         '_id'       => substr(hash('sha512', $content . time() . rand(0, 255)), 0, 8),
         'content'   => $content,
-        'createdAt' => new MongoDate(),
+        'created_at' => new MongoDate(),
     );
 
     if ('' === trim($paste['content'])) {
@@ -85,6 +85,10 @@ $app->get('/{id}', function($id) use ($app) {
     if (!$paste) {
         throw new NotFoundHttpException('paste not found');
     }
+
+    $time = explode(' ', $paste['created_at']);
+    $dt = new DateTime();
+    $paste['created_at'] = $dt->setTimestamp((float)$time[0] + (int)$time[1]);
 
     return $app['twig']->render('view.html', array(
         'copy_url'	=> $app['url_generator']->generate('homepage', array('parent' => $paste['_id'])),
