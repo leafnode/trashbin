@@ -4,7 +4,7 @@
 
 <h1>trashbin</h1>
 <p>simple pastebin for pasting pastes.</p>
-{% if error_msg %}
+{% if error_msg is defined %}
 <p class="error_msg">&sim; {{ error_msg }}</p>
 {% endif %}
 <form action="{{ create_url }}" method="post">
@@ -16,7 +16,7 @@
       </option>
       {% endfor %}
     </select>
-    <textarea name="content">{{ paste.content }}</textarea>
+    <textarea name="content">{% if paste.content is defined %}{{ paste.content }}{% endif %}</textarea>
     <input type="submit" name="submit" value="trash it!" />
 </form>
 
